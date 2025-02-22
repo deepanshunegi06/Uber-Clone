@@ -110,4 +110,75 @@ The request should be sent as JSON with the following required fields:
 - If the credentials are incorrect, an error message is returned.
 
 ---
+
+## `/users/profile` - Get User Profile
+
+### **Description**
+This endpoint retrieves the profile details of the authenticated user.
+
+### **Endpoint**
+```
+GET /users/profile
+```
+
+### **Headers**
+| Header          | Type   | Required | Description |
+|---------------|--------|----------|-------------|
+| `Authorization` | String | ✅ Yes | Bearer token for authentication |
+
+### **Response**
+#### **Success (200 OK)**
+```json
+{
+  "_id": "64b5f1234abc5678ef901234",
+  "firstname": "John",
+  "lastname": "Doe",
+  "email": "johndoe@example.com"
+}
+```
+
+#### **Error Responses**
+| Status Code | Message |
+|-------------|---------|
+| 401 Unauthorized | `{"message": "Unauthorized"}` |
+
+### **Notes**
+- This endpoint requires authentication.
+- The user must be logged in to access their profile.
+
+---
+
+## `/users/logout` - Logout User
+
+### **Description**
+This endpoint logs out the user by clearing the authentication token and blacklisting it.
+
+### **Endpoint**
+```
+GET /users/logout
+```
+
+### **Headers**
+| Header          | Type   | Required | Description |
+|---------------|--------|----------|-------------|
+| `Authorization` | String | ✅ Yes | Bearer token for authentication |
+
+### **Response**
+#### **Success (200 OK)**
+```json
+{
+  "message": "Logged out successfully"
+}
+```
+
+#### **Error Responses**
+| Status Code | Message |
+|-------------|---------|
+| 401 Unauthorized | `{"message": "Unauthorized"}` |
+
+### **Notes**
+- This endpoint requires authentication.
+- The token is blacklisted to prevent reuse.
+
+---
 **Author:** Deepanshu Negi
