@@ -56,4 +56,58 @@ The request should be sent as JSON with the following required fields:
 - If an email is already registered, an error will be returned.
 
 ---
+
+## `/users/login` - User Login Endpoint
+
+### **Description**
+This endpoint allows users to log in by providing their email and password. If the credentials are valid, a JSON Web Token (JWT) is returned for authentication.
+
+### **Endpoint**
+```
+POST /users/login
+```
+
+### **Request Body**
+The request should be sent as JSON with the following required fields:
+
+| Field      | Type   | Required | Description |
+|------------|--------|----------|-------------|
+| `email`     | String | ✅ Yes | Must be a valid email format |
+| `password`  | String | ✅ Yes | Must be at least 6 characters long |
+
+### **Example Request**
+```json
+{
+  "email": "johndoe@example.com",
+  "password": "securepassword"
+}
+```
+
+### **Response**
+#### **Success (200 OK)**
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5c...",
+  "user": {
+    "_id": "64b5f1234abc5678ef901234",
+    "firstname": "John",
+    "lastname": "Doe",
+    "email": "johndoe@example.com"
+  }
+}
+```
+
+#### **Error Responses**
+| Status Code | Message |
+|-------------|---------|
+| 400 Bad Request | `[{ "msg": "Invalid Email", "param": "email", "location": "body" }]` (Validation Error) |
+| 401 Unauthorized | `{"message": "Invalid Email or Password"}` |
+| 500 Internal Server Error | `{"error": "Something went wrong"}` |
+
+### **Notes**
+- The password is checked against the stored hashed password.
+- If authentication is successful, a JWT token is returned for further authentication.
+- If the credentials are incorrect, an error message is returned.
+
+---
 **Author:** Deepanshu Negi
