@@ -2,6 +2,7 @@ const userModel = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const blackListTokenModel = require("../models/blackListToken.model");
+const captainModel=require('../models/captain.model');
 
 module.exports.authUser = async (req, res, next) => {
     // Extract token from either cookies or the Authorization header
@@ -32,5 +33,36 @@ module.exports.authUser = async (req, res, next) => {
     } catch (err) {
         // If token verification fails (expired, invalid, or tampered), return an unauthorized response
         return res.status(401).json({ message: "Unauthorized" });
+    }
+};
+
+module.exports.authCaptain = async (req, res, next) => {
+    try {
+        const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+
+        if (!token) {
+            return res.status(401).json({ message: "Unauthorized - No token provided" });
+        }
+
+        // Check if token is blacklisted
+        const isBlackListed = await blackListTokenModel.findOne({ token });
+        if (isBlackListed) {
+            return res.status(401).json({ message: "Unauthorized - Token is blacklisted" });
+        }
+
+        // Verify JWT token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        // Find captain
+        const captain = await captainModel.findById(decoded._id);
+        if (!captain) {
+            return res.status(401).json({ message: "Unauthorized - Captain not found" });
+        }
+
+        req.captain = captain; // Attach captain to request object
+        next(); // Proceed to next middleware
+
+    } catch (err) {
+        return res.status(401).json({ message: "Unauthorized - Invalid token" });
     }
 };

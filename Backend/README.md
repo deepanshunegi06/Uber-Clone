@@ -294,4 +294,156 @@ POST /captains/register
 
 ---
 
+## `/captains/login` - Captain Login Endpoint
+
+### **Description**
+
+This endpoint allows captains to log in by providing their email and password. If the credentials are valid, a JSON Web Token (JWT) is returned for authentication, and a cookie is set for session management.
+
+### **Endpoint**
+
+```
+POST /captains/login
+```
+
+### **Request Body**
+
+| Field      | Type   | Required | Description                        |
+| ---------- | ------ | -------- | ---------------------------------- |
+| `email`    | String | ✅ Yes   | Must be a valid registered email   |
+| `password` | String | ✅ Yes   | Must be at least 6 characters long |
+
+### **Example Request**
+
+```json
+{
+  "email": "alexsmith@example.com",
+  "password": "strongpassword"
+}
+```
+
+### **Response**
+
+#### **Success (200 OK)**
+
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5c...",
+  "captain": {
+    "_id": "64b5f1234abc5678ef901234",
+    "firstname": "Alex",
+    "lastname": "Smith",
+    "email": "alexsmith@example.com"
+  }
+}
+```
+
+#### **Error Responses**
+
+| Status Code               | Message                                    |
+| ------------------------- | ------------------------------------------ |
+| 400 Bad Request           | `[{ "msg": "Invalid Email or Password" }]` |
+| 500 Internal Server Error | `{"error": "Something went wrong"}`        |
+
+### **Notes**
+
+- The password is checked against the stored hashed password.
+- If authentication is successful, a JWT token is returned and stored in a cookie.
+
+---
+
+## `/captains/profile` - Captain Profile Endpoint
+
+### **Description**
+
+This endpoint allows an authenticated captain to retrieve their profile details.
+
+### **Endpoint**
+
+```
+GET /captains/profile
+```
+
+### **Headers**
+
+| Field           | Type   | Required | Description                    |
+| --------------- | ------ | -------- | ------------------------------ |
+| `Authorization` | String | ✅ Yes   | Bearer token or session cookie |
+
+### **Response**
+
+#### **Success (200 OK)**
+
+```json
+{
+  "captain": {
+    "_id": "64b5f1234abc5678ef901234",
+    "firstname": "Alex",
+    "lastname": "Smith",
+    "email": "alexsmith@example.com",
+    "phone": "+1234567890",
+    "vehicle": {
+      "color": "Red",
+      "plateNumber": "AB123CD",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+#### **Error Responses**
+
+| Status Code               | Message                             |
+| ------------------------- | ----------------------------------- |
+| 401 Unauthorized          | `{"message": "Unauthorized"}`       |
+| 500 Internal Server Error | `{"error": "Something went wrong"}` |
+
+### **Notes**
+
+- Requires authentication via a valid JWT token in the Authorization header or a session cookie.
+
+---
+
+## `/captains/logout` - Captain Logout Endpoint
+
+### **Description**
+
+This endpoint logs out the authenticated captain by clearing the session cookie and blacklisting the token.
+
+### **Endpoint**
+
+```
+POST /captains/logout
+```
+
+### **Headers**
+
+| Field           | Type   | Required | Description                         |
+| --------------- | ------ | -------- | ----------------------------------- |
+| `Authorization` | String | ❌ No    | Bearer token (if not using cookies) |
+
+### **Response**
+
+#### **Success (200 OK)**
+
+```json
+{
+  "message": "Logged out successfully"
+}
+```
+
+#### **Error Responses**
+
+| Status Code               | Message                             |
+| ------------------------- | ----------------------------------- |
+| 401 Unauthorized          | `{"message": "Unauthorized"}`       |
+| 500 Internal Server Error | `{"error": "Something went wrong"}` |
+
+### **Notes**
+
+- Clears the authentication cookie.
+- Adds the token to a blacklist to prevent reuse.
+- Requires authentication to log out.
+
 **Author:** Deepanshu Negi
