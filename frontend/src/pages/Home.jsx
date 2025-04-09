@@ -7,7 +7,7 @@ const Home = () => {
       {/* Logo */}
       <div>
         <img
-          src="uber-logo.png"
+          src="uber-white-logo.png"
           alt="Uber Logo"
           className="w-14 h-auto object-contain"
         />
