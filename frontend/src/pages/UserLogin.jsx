@@ -12,7 +12,8 @@ const UserLogin = () => {
   // Handler for form submission
   const submitHandler = (e) => {
     e.preventDefault();                            // Prevent default form refresh behavior
-    setUserData({ email, password });              // Save submitted data to userData state
+    setUserData({ email, password });              // Save submitted data to userData statecd fro 
+    // console.log(userData)         
     setEmail("");                                  // Clear email field
     setPassword("");                               // Clear password field
   };
@@ -61,7 +62,7 @@ const UserLogin = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full px-4 py-2 mb-6 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black placeholder:text-gray-500 transition-all"
-            placeholder="••••••••"
+            placeholder="•••••••••"
           />
 
           {/* Submit/Login button */}
