@@ -12,7 +12,7 @@ const UserContext = ({children}) => {
     })
   return (
     <div>
-        <UserDataContext.Provider>
+        <UserDataContext.Provider value={{user,setUser}}>
             {children}
         </UserDataContext.Provider>
         
@@ -20,4 +20,4 @@ const UserContext = ({children}) => {
   )
 }
 
-export default UserContext
+export default UserContext;

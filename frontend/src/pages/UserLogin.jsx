@@ -17,7 +17,7 @@ const UserLogin = () => {
     setEmail("");                                  // Clear email field
     setPassword("");                               // Clear password field
   };
-
+  
   return (
     // Outer container with full-screen height and center alignment
     <div className="min-h-[100dvh] bg-gradient-to-br from-gray-100 to-gray-300 flex items-center justify-center px-4">
